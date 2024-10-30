@@ -40,16 +40,18 @@ func Navbar(currentPath string) g.Node {
 	return html.Nav(html.Class("navbar bg-gray-700 flex items-center space-x-4 p-4 text-white"),
 		Container(
 			NavbarLink("/home", "Home", currentPath == "/home"),
+			NavbarLink("/home", "Manage Links", currentPath == "/manage-links"),
+			NavbarLink("/home", "Settings", currentPath == "/settings"),
 		),
 	)
 }
 
 func NavbarLink(path, text string, active bool) g.Node {
-	return html.A(html.Class("hover:cursor-pointer"), html.Href(path), g.Text(text),
-		c.Classes{
-			"active": active,
-		},
-	)
+	if active {
+		return html.A(html.Class("hover:cursor-pointer mx-2 text-gray-400"), html.Href(path), g.Text(text))
+	} else {
+		return html.A(html.Class("hover:cursor-pointer mx-2"), html.Href(path), g.Text(text))
+	}
 }
 
 func Container(children ...g.Node) g.Node {
