@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"littlelink/backend"
 	"littlelink/frontend"
 	"net/http"
+
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
@@ -42,6 +45,8 @@ func putShorten(c *gin.Context) {
 // Function to start the server
 func start() {
 
+	fmt.Print("\n\n\nPort Selected = " + os.Args[1] + "\n\n\n")
+
 	router := gin.Default()
 
 	router.GET("/:url", getLongUrl)
@@ -51,7 +56,7 @@ func start() {
 		frontend.GetHomePage(c.Writer, c.Request)
 	})
 
-	router.Run("localhost:8080")
+	router.Run("localhost:" + os.Args[1])
 
 }
 
