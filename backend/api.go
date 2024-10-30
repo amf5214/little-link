@@ -1,6 +1,8 @@
 package backend
 
 import (
+	"strings"
+
 	"gorm.io/gorm"
 )
 
@@ -24,6 +26,9 @@ func ShortenUrl() string {
 // Function to store a url and return a shortened url
 func LogUrl(db *gorm.DB, longurl string) string {
 	shorturl := ShortenUrl()
+	longurl = strings.Replace(longurl, "https://", "", 1)
+	longurl = strings.Replace(longurl, "http://", "", 1)
+
 	db.Create(&LittleLink{ShortUrl: shorturl, LongUrl: longurl})
 	return shorturl
 }
