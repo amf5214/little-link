@@ -26,15 +26,18 @@ func Page(title, path string, body g.Node) g.Node {
 	return c.HTML5(c.HTML5Props{
 		Title:    title,
 		Language: "en",
+		Head: []g.Node{
+			html.Script(g.Attr("src", "https://cdn.tailwindcss.com")),
+		},
 		Body: []g.Node{
 			Navbar(path),
-			Container(body),
+			BodyContainer(body),
 		},
 	})
 }
 
 func Navbar(currentPath string) g.Node {
-	return html.Nav(html.Class("navbar"),
+	return html.Nav(html.Class("navbar bg-gray-700 flex items-center space-x-4 p-4 text-white"),
 		Container(
 			NavbarLink("/home", "Home", currentPath == "/home"),
 		),
@@ -42,7 +45,7 @@ func Navbar(currentPath string) g.Node {
 }
 
 func NavbarLink(path, text string, active bool) g.Node {
-	return html.A(html.Href(path), g.Text(text),
+	return html.A(html.Class("hover:cursor-pointer"), html.Href(path), g.Text(text),
 		c.Classes{
 			"active": active,
 		},
@@ -51,4 +54,9 @@ func NavbarLink(path, text string, active bool) g.Node {
 
 func Container(children ...g.Node) g.Node {
 	return html.Div(html.Class("container"), g.Group(children))
+}
+
+func BodyContainer(children ...g.Node) g.Node {
+	return html.Div(html.Class("bg-gray-900 h-screen text-white flex flex-auto justify-center content-center"), g.Group(children))
+
 }
