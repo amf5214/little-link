@@ -45,7 +45,14 @@ func putShorten(c *gin.Context) {
 // Function to start the server
 func start() {
 
-	fmt.Print("\n\n\nPort Selected = " + os.Args[1] + "\n\n\n")
+	var tcpport string
+
+	if len(os.Args) > 1 {
+		tcpport = os.Args[1]
+		fmt.Print("\n\n\nPort Selected = " + tcpport + "\n\n\n")
+	} else {
+		tcpport = "8080"
+	}
 
 	router := gin.Default()
 
@@ -56,7 +63,7 @@ func start() {
 		frontend.GetHomePage(c.Writer, c.Request)
 	})
 
-	router.Run("localhost:" + os.Args[1])
+	router.Run("localhost:" + tcpport)
 
 }
 
