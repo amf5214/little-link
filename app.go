@@ -2,6 +2,7 @@ package main
 
 import (
 	"littlelink/backend"
+	"littlelink/frontend"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ var database_file = "test.db"
 // Database connection
 var db, _ = gorm.Open(sqlite.Open(database_file), &gorm.Config{})
 
-type Link struct {
+type LinkObj struct {
 	url string
 }
 
@@ -27,7 +28,7 @@ func getLongUrl(c *gin.Context) {
 
 // Path function to log a url and get a shortened url
 func putShorten(c *gin.Context) {
-	var link Link
+	var link LinkObj
 	if err := c.BindJSON(&link); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, "Invalid Request")
 		return
@@ -45,8 +46,13 @@ func start() {
 
 	router.GET("/:url", getLongUrl)
 	router.PUT("/shorten", putShorten)
+	router.GET("/home", func(c *gin.Context) {
+		// Wraper for Gomponents handler
+		frontend.GetHomePage(c.Writer, c.Request)
+	})
 
 	router.Run("localhost:8080")
+
 }
 
 // Main function
