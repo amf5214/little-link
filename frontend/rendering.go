@@ -28,6 +28,7 @@ func Page(title, path string, body g.Node) g.Node {
 		Language: "en",
 		Head: []g.Node{
 			html.Script(g.Attr("src", "https://cdn.tailwindcss.com")),
+			// html.Link(g.Attr("href", "./output.css"), g.Attr("rel", "stylesheet")),
 		},
 		Body: []g.Node{
 			Navbar(path),
@@ -58,7 +59,20 @@ func Container(children ...g.Node) g.Node {
 	return html.Div(html.Class("container"), g.Group(children))
 }
 
+func VBox(children ...g.Node) g.Node {
+	return html.Div(html.Class("flex flex-col justify-center content-center items-center flex-auto "), g.Group(children))
+}
+
+func HBox(classString string, children ...g.Node) g.Node {
+	return html.Div(html.Class("flex flex-row justify-center content-center items-center flex-auto "+classString), g.Group(children))
+}
+
+func InputBox(text string, buttonFunction string, children ...g.Node) g.Node {
+	return html.Form(g.Attr("action", "/tinylink"), g.Attr("method", "POST"), HBox("max-h-[30vh] max-w-[30vw] p-3 bg-gray-800", html.Input(html.Class("mr-1 h-16 w-64 p-1 bg-white text-black"), g.Attr("name", "urlpath")), html.Input(html.Class("ml-1 h-16 w-32 p-1 bg-white text-black"), g.Text("Create"), g.Attr("type", "submit"))))
+
+}
+
 func BodyContainer(children ...g.Node) g.Node {
-	return html.Div(html.Class("bg-gray-900 h-screen text-white flex flex-auto justify-center content-center"), g.Group(children))
+	return html.Div(html.Class("bg-gray-900 h-screen text-white flex flex-auto justify-center content-center items-center"), g.Group(children))
 
 }

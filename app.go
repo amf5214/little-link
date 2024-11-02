@@ -42,6 +42,15 @@ func putShorten(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, shortenedUrl)
 }
 
+// Path for frontend to shorten url
+func frontentShorten(c *gin.Context) {
+	path := c.PostForm("urlpath")
+
+	shortenedUrl := backend.LogUrl(db, path)
+
+	c.Redirect(http.StatusMovedPermanently, "/home/completed/"+shortenedUrl)
+}
+
 // Function to start the server
 func start() {
 
@@ -58,9 +67,14 @@ func start() {
 
 	router.GET("/:url", getLongUrl)
 	router.PUT("/shorten", putShorten)
+	router.POST("/tinylink", frontentShorten)
 	router.GET("/home", func(c *gin.Context) {
 		// Wraper for Gomponents handler
 		frontend.GetHomePage(c.Writer, c.Request)
+	})
+	router.GET("/home/completed/:shorten", func(c *gin.Context) {
+		// Wraper for Gomponents handler
+		frontend.GetCompletedPage(c.Writer, c.Request, c.Param("shorten"))
 	})
 
 	router.Run("localhost:" + tcpport)
